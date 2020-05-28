@@ -20,7 +20,7 @@ from sklearn.linear_model import LogisticRegression
 
 def svm_method (X_train, X_test, y_train, y_test) :
     # Propozycje parametrów oraz algorytmów
-    parameters = {'kernel': ('linear', 'rbf', 'poly'),
+    parameters = {'kernel': ('rbf', 'poly'),
                   'C': [2 ** -5, 2 ** 5],
                   'gamma': [2 ** -5, 2 ** 5],
                   'degree': [1, 2, 3, 4, 5, 6]}
@@ -413,11 +413,11 @@ if __name__ == '__main__':
     # print("METODA SVM")
     # svm_method(X_train, X_test, y_train, y_test)
 
-    # coś liczy ale sypie błędami
-    print("METODA PJK")
-    pjk_method(X_train, X_test, y_train, y_test)
+    # działa (ale bez wykresów ROC i wyliczonego AUC), wyniki w komentarzu  pod metodą
+    # print("METODA PJK")
+    # pjk_method(X_train, X_test, y_train, y_test)
 
-    # działą, wyniki w komentarzu  pod metodą
+    # działa, wyniki w komentarzu  pod metodą
     # print("METODA DT")
     # dt_method(X_train, X_test, y_train, y_test)
 
@@ -429,4 +429,13 @@ if __name__ == '__main__':
     # model_prediction = naive_model.fit(X_train, y_train.ravel())
     # x = model_prediction.score(X_train, y_train)
     # print(x)
+
+    # Wymagania:
+    # Projekt powinien zawierać porównanie działania co najmniej dwóch metod uczenia maszynowego. Kryteriami oceny będą między innymi:
+    #
+    # a) dobranie odpowiednich parametrów pracy algorytmów;
+    #
+    # b) przedstawienie zbioru danych poddawanego analizie (co znaczą poszczególne argumenty, z jakim typem zmiennych mamy do czynienia: w skali nominalnej czy porządkowej; zakres poszczególnych argumentów np. [0, 100];
+    #
+    # c) analiza i interpretacja wyników opatrzona wykresami i komentarzami; wykresy powinny być czytelne, osie oznaczone, wstawiona legenda.
 
