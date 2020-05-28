@@ -248,6 +248,46 @@ def pjk_method (X_train, X_test, y_train, y_test):
     # AUC dla kl regresji logistycznej jest lepszy dla zb testowego niz AUC lasu losowego dla tego samego zb,
     # lecz AUC dla calego zb wypada juz slabiej na tle lasu losowego.
 
+    # Wynik:
+    # METODA PJK
+    # Dokladnosc klasyfikacji lasu losowego na zbiorze treningowym wynosi 0.683646,     zas na zbiorze testowym 0.652083
+    # Dokladnosc klasyfikacji regresji logistycznej na zbiorze treningowym wynosi 0.589812,     zas na zbiorze testowym 0.620833
+    #
+    # cf_matrix dla lasu:
+    # [[  0   0   2   1   0   0]
+    #  [  0   0  10   5   0   0]
+    #  [  0   0 163  44   1   0]
+    #  [  0   0  58 136  10   0]
+    #  [  0   0   1  30  14   0]
+    #  [  0   0   0   3   2   0]]
+    # cf_matrix_all dla lasu:
+    # [[  0   0   8   2   0   0]
+    #  [  0   0  37  16   0   0]
+    #  [  0   0 552 126   3   0]
+    #  [  0   0 170 448  20   0]
+    #  [  0   0   7 114  78   0]
+    #  [  0   0   0  15   3   0]]
+    # cf_matrix dla logistycznej:
+    # [[  0   0   3   0   0   0]
+    #  [  0   0  10   5   0   0]
+    #  [  0   0 160  47   1   0]
+    #  [  0   0  62 124  18   0]
+    #  [  0   0   3  28  14   0]
+    #  [  0   0   0   3   2   0]]
+    # cf_matrix_all dla logistycznej:
+    # [[  0   0   9   1   0   0]
+    #  [  0   0  34  18   1   0]
+    #  [  0   0 513 164   4   0]
+    #  [  0   0 209 381  48   0]
+    #  [  0   0  13 122  64   0]
+    #  [  0   0   0  10   8   0]]
+    #
+    # Precyzja wynosi 0.652083, zas pelnosc 0.652083
+    # DLA CALEGO ZB: Precyzja wynosi 0.674171, zas pelnosc 0.674171
+    # DLA KL REGRESJI LOGISTYCZNEJ:
+    # Precyzja wynosi 0.620833, zas pelnosc 0.620833
+    # DLA CALEGO ZB: Precyzja wynosi 0.599124, zas pelnosc 0.599124
+
 def dt_method (X_train, X_test, y_train, y_test):
     # Trenowanie klasyfikatora
     tree_classifier = tree.DecisionTreeClassifier(random_state=0)
