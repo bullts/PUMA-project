@@ -70,6 +70,9 @@ def pjk_method (X_train, X_test, y_train, y_test):
     path = classifier.cost_complexity_pruning_path(X_train, y_train)
     alphas = path.ccp_alphas
 
+    X = np.concatenate((X_train, X_test))
+    y = np.concatenate((y_train, y_test))
+
     # Przycinanie drzewa decyzyjnego
     classifiers = []
     for alpha in alphas:
@@ -100,7 +103,7 @@ def pjk_method (X_train, X_test, y_train, y_test):
 
     # Edit
     # Wyuczenie klasyfikatora regresji logistycznej
-    logistic_regression = LogisticRegression()
+    logistic_regression = LogisticRegression(max_iter=10000)
     logistic_regression.fit(X_train, y_train)
 
     # Sprawdzenie dokładności klasyfikatora lasu losowego dla obu zbiorów
@@ -121,8 +124,8 @@ def pjk_method (X_train, X_test, y_train, y_test):
     # Ocena jakości klasyfikatora, confusion matrix (dla zb testowego i dla całego zb
     forest_prediction = forest.predict(X_test)
     forest_prediction_all = forest.predict(X)
-    cf_matrix_all = confusion_matrix(y, forest_prediction_all, labels=[1, 0])
-    cf_matrix = confusion_matrix(y_test, forest_prediction, labels=[1, 0])
+    cf_matrix_all = confusion_matrix(y, forest_prediction_all)
+    cf_matrix = confusion_matrix(y_test, forest_prediction)
     print("cf_matrix dla lasu:")  # Edit do ogarniecia wyswietlanych danych
     print(cf_matrix)
     print("cf_matrix_all dla lasu:")  # Edit do ogarniecia wyswietlanych danych
@@ -132,8 +135,8 @@ def pjk_method (X_train, X_test, y_train, y_test):
     # Ocena jakości klasyfikatora, confusion matrix (dla zb testowego i dla całego zb DLA KL REGRESJI LOGISTYCZNEJ
     l_prediction = logistic_regression.predict(X_test)
     l_prediction_all = logistic_regression.predict(X)
-    cf_matrix_l_all = confusion_matrix(y, l_prediction_all, labels=[1, 0])
-    cf_matrix_l = confusion_matrix(y_test, l_prediction, labels=[1, 0])
+    cf_matrix_l_all = confusion_matrix(y, l_prediction_all)
+    cf_matrix_l = confusion_matrix(y_test, l_prediction)
     print("cf_matrix dla logistycznej:")  # potocznie do ogarniecia wyswietlanych danych
     print(cf_matrix_l)
     print("cf_matrix_all dla logistycznej:")  # potocznie do ogarniecia wyswietlanych danych
@@ -142,92 +145,92 @@ def pjk_method (X_train, X_test, y_train, y_test):
     print("")
 
     # Sprawdzenie precyzji oraz pełności
-    precision = precision_score(y_test, forest_prediction)
-    recall = recall_score(y_test, forest_prediction)
-    precision_all = precision_score(y, forest_prediction_all)
-    recall_all = recall_score(y, forest_prediction_all)
+    precision = precision_score(y_test, forest_prediction, average='micro') #average : string, [None, ‘binary’ (default), ‘micro’, ‘macro’, ‘samples’, ‘weighted’]
+    recall = recall_score(y_test, forest_prediction, average='micro')       # można pomyśleć nad różnymi wartościami
+    precision_all = precision_score(y, forest_prediction_all, average='micro')
+    recall_all = recall_score(y, forest_prediction_all, average='micro')
     print("Precyzja wynosi {0:3f}, zas pelnosc {1:3f}".format(precision, recall))
     print("DLA CALEGO ZB: Precyzja wynosi {0:3f}, zas pelnosc {1:3f}".format(precision_all, recall_all))
 
     # Edit
     # Sprawdzenie precyzji oraz pełności dla kl regresji logistycznej
-    precision_l = precision_score(y_test, l_prediction)
-    recall_l = recall_score(y_test, l_prediction)
-    precision_all_l = precision_score(y, l_prediction_all)
-    recall_all_l = recall_score(y, l_prediction_all)
+    precision_l = precision_score(y_test, l_prediction, average='micro')
+    recall_l = recall_score(y_test, l_prediction, average='micro')
+    precision_all_l = precision_score(y, l_prediction_all, average='micro')
+    recall_all_l = recall_score(y, l_prediction_all, average='micro')
     print("DLA KL REGRESJI LOGISTYCZNEJ: ")
     print("Precyzja wynosi {0:3f}, zas pelnosc {1:3f}".format(precision_l, recall_l))
     print("DLA CALEGO ZB: Precyzja wynosi {0:3f}, zas pelnosc {1:3f}".format(precision_all_l, recall_all_l))
 
     print("")
-
-    # Krzywa ROC
-    FPR, TPR, _ = roc_curve(forest_prediction, y_test)
-    plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
-    plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
-    plt.xlim([0.0, 1.0])  # zakres na osi OX
-    plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC curve)')
-    plt.show()
-
-    # Edit
-    # Krzywa ROC dla kl regresji logistycznej
-    FPR, TPR, _ = roc_curve(l_prediction, y_test)
-    plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
-    plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
-    plt.xlim([0.0, 1.0])  # zakres na osi OX
-    plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC curve) for l')
-    plt.show()
-
-    # Krzywa ROC dla całego zb
-    FPR, TPR, _ = roc_curve(forest_prediction_all, y)
-    plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
-    plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
-    plt.xlim([0.0, 1.0])  # zakres na osi OX
-    plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC curve) ALL')
-    plt.show()
-
-    # Edit
-    # Krzywa ROC dla całego zb dla kl regresji logistycznej
-    FPR, TPR, _ = roc_curve(l_prediction_all, y)
-    plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
-    plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
-    plt.xlim([0.0, 1.0])  # zakres na osi OX
-    plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC curve) for l  ALL')
-    plt.show()
-
-    # Wartość AUC
-    AUC = roc_auc_score(forest_prediction, y_test)
-    print("AUC:")
-    print(AUC)
-
-    # Edit
-    # Wartosc AUC dla kl regresji logistycznej
-    AUC_l = roc_auc_score(l_prediction, y_test)
-    print("AUC l:")
-    print(AUC_l)
-
-    # Wartość AUC dla całego zb
-    AUC_all = roc_auc_score(forest_prediction_all, y)
-    print("AUC all:")
-    print(AUC_all)
-
-    # Edit
-    # Wartość AUC dla całego zb dla kl regresji logistycznej
-    AUC_all_l = roc_auc_score(l_prediction_all, y)
-    print("AUC l all:")
-    print(AUC_all_l)
+    # # Krzywa ROC
+    # FPR, TPR, _ = roc_curve(forest_prediction, y_test, multi_class="ovo",  average='macro')
+    # print("Tutaj2")
+    # plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
+    # plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
+    # plt.xlim([0.0, 1.0])  # zakres na osi OX
+    # plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC curve)')
+    # plt.show()
+    #
+    # # Edit
+    # # Krzywa ROC dla kl regresji logistycznej
+    # FPR, TPR, _ = roc_curve(l_prediction, y_test)
+    # plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
+    # plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
+    # plt.xlim([0.0, 1.0])  # zakres na osi OX
+    # plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC curve) for l')
+    # plt.show()
+    #
+    # # Krzywa ROC dla całego zb
+    # FPR, TPR, _ = roc_curve(forest_prediction_all, y)
+    # plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
+    # plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
+    # plt.xlim([0.0, 1.0])  # zakres na osi OX
+    # plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC curve) ALL')
+    # plt.show()
+    #
+    # # Edit
+    # # Krzywa ROC dla całego zb dla kl regresji logistycznej
+    # FPR, TPR, _ = roc_curve(l_prediction_all, y)
+    # plt.plot(FPR, TPR, linewidth=2, color='red')  # wykres krzywej ROC
+    # plt.plot([0, 1], [0, 1], color='green', linestyle='--')  # wykres linii przerywanej
+    # plt.xlim([0.0, 1.0])  # zakres na osi OX
+    # plt.ylim([0.0, 1.03])  # zakres na osi OY, minimalnie ponad 1
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC curve) for l  ALL')
+    # plt.show()
+    #
+    # # Wartość AUC
+    # AUC = roc_auc_score(forest_prediction, y_test)
+    # print("AUC:")
+    # print(AUC)
+    #
+    # # Edit
+    # # Wartosc AUC dla kl regresji logistycznej
+    # AUC_l = roc_auc_score(l_prediction, y_test)
+    # print("AUC l:")
+    # print(AUC_l)
+    #
+    # # Wartość AUC dla całego zb
+    # AUC_all = roc_auc_score(forest_prediction_all, y)
+    # print("AUC all:")
+    # print(AUC_all)
+    #
+    # # Edit
+    # # Wartość AUC dla całego zb dla kl regresji logistycznej
+    # AUC_all_l = roc_auc_score(l_prediction_all, y)
+    # print("AUC l all:")
+    # print(AUC_all_l)
 
     # Podsumowanie
     # Najlepszą dokładność dla zbioru treningowego otzrymujemy dla pełnego drzewa - wtedy też jest najgorsza dla zbioru testowego.
@@ -371,8 +374,8 @@ if __name__ == '__main__':
     # svm_method(X_train, X_test, y_train, y_test)
 
     # coś liczy ale sypie błędami
-    # print("METODA PJK")
-    # pjk_method(X_train, X_test, y_train, y_test)
+    print("METODA PJK")
+    pjk_method(X_train, X_test, y_train, y_test)
 
     # działą, wyniki w komentarzu  pod metodą
     # print("METODA DT")
