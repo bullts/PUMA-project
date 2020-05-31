@@ -18,17 +18,18 @@ from sklearn.metrics import precision_score, recall_score
 
 from sklearn.linear_model import LogisticRegression
 
-def svm_method (X_train, X_test, y_train, y_test) :
+def svm_method (data):
+    X_train, X_test, y_train, y_test = split_data(data)
     # Propozycje parametrów oraz algorytmów
-    parameters = {'kernel': ('rbf', 'poly'),
-                  'C': [2 ** -5, 2 ** 5],
-                  'gamma': [2 ** -5, 2 ** 5],
-                  'degree': [1, 2, 3, 4, 5, 6]}
+    parameters = {'kernel': ('linear', 'rbf', 'poly'),
+                  'C': [2 ** -2, 2 ** 2],
+                  'gamma': [2 ** -2, 2 ** 2],
+                  'degree': [1, 2, 3, 4]}
     svc = svm.SVC()
 
     # Uruchomienie metody GridSearch
     print("GRID: ")
-    setGS = GridSearchCV(svc, parameters)
+    setGS = GridSearchCV(svc, parameters, random_state=0, cv=2, scoring='accuracy', verbose=10)
     setGS.fit(X_train, y_train)
     print('Najlepsze parametry: ' + str(setGS.best_params_))
     print('Sredni wynik kross-walidacji: ' + str(setGS.best_score_))
@@ -39,8 +40,8 @@ def svm_method (X_train, X_test, y_train, y_test) :
 
     # Urychomienie metody RandomizedSearch
     print("RANDOMIZED: ")
-    setRS = RandomizedSearchCV(svc, parameters, cv=3, random_state=2)
-    setRS.fit(X, y)
+    setRS = RandomizedSearchCV(svc, parameters, random_state=0, cv=2, scoring='accuracy', verbose=10)
+    setRS.fit(X_train, y_train)
     print('Najlepsze parametry: ' + str(setRS.best_params_))
     print('Sredni wynik kross-walidacji: ' + str(setRS.best_score_))
     bestRS = setRS.score(X_test, y_test)
@@ -65,7 +66,8 @@ def svm_method (X_train, X_test, y_train, y_test) :
     # wyszukała lepsze parametry potrzebene do wyuczenia kalsyfikatora w efekcie dokładność zb testowego jak i treningowego jest wyższa
     # dla kladyfikatora wyuczonego z parametrami znalezionymi przez metode RandomizedSearch niż GridSearch.
 
-def pjk_method (X_train, X_test, y_train, y_test):
+def pjk_method (data):
+    X_train, X_test, y_train, y_test = split_data(data)
     classifier = tree.DecisionTreeClassifier(random_state=0)
     path = classifier.cost_complexity_pruning_path(X_train, y_train)
     alphas = path.ccp_alphas
@@ -288,7 +290,8 @@ def pjk_method (X_train, X_test, y_train, y_test):
     # Precyzja wynosi 0.620833, zas pelnosc 0.620833
     # DLA CALEGO ZB: Precyzja wynosi 0.599124, zas pelnosc 0.599124
 
-def dt_method (X_train, X_test, y_train, y_test):
+def dt_method (data):
+    X_train, X_test, y_train, y_test = split_data(data)
     # Trenowanie klasyfikatora
     tree_classifier = tree.DecisionTreeClassifier(random_state=0)
     tree_classifier.fit(X_train, y_train)
@@ -298,8 +301,8 @@ def dt_method (X_train, X_test, y_train, y_test):
     score = tree_classifier.score(X_train, y_train)
     print('zb treningowy ------------------------------')
 
-    print('prediction:')
-    print(prediction)
+    #print('prediction:')
+    #print(prediction)
     print('score:')
     print(score)
 
@@ -313,8 +316,8 @@ def dt_method (X_train, X_test, y_train, y_test):
     score = tree_classifier.score(X_test, y_test)
     print('zb testowy ------------------------------')
 
-    print('prediction:')
-    print(prediction)
+    #print('prediction:')
+    #print(prediction)
     print('score:')
     print(score)
 
@@ -389,46 +392,83 @@ def dt_method (X_train, X_test, y_train, y_test):
     #  [  0   0   2  27  29   1]
     #  [  0   0   0   3   1   3]]
 
-if __name__ == '__main__':
-    # pobranie danych z pliku z pominieciem pierwszego wiersza
-    data = np.genfromtxt('winequality-red.csv', delimiter=';', skip_header=1)
-    print(data)
+def gaussian_method (data):
+    X_train, X_test, y_train, y_test = split_data(data)
+    clf = GaussianNB()
+    clf.fit(X_train, y_train)
+    train_prediction = clf.predict(X_train)
+    train_score = clf.score(X_train, y_train)
+    #print("Predykcja zbioru treningowego: ")
+    #print(train_prediction)
+    print("Score zbioru treningowego: ")
+    print(train_score)
+    test_prediction = clf.predict(X_test)
+    test_score = clf.score(X_test, y_test)
+    #print("Predykcja zbioru testowego: ")
+   # print(test_prediction)
+    print("Score zbioru testowego: ")
+    print(test_score)
+    # Wynik:
+    # METODA GAUSSA
+    #
+    # Predykcja zbioru treningowego:
+    # [4. 7. 5. ... 5. 7. 5.]
+    # Score zbioru treningowego:
+    # 0.5460232350312779
+    # Predykcja zbioru testowego:
+    # [6. 5. 7. 5. 7. 5. 5. 6. 5. 5. 5. 5. 6. 4. 6. 7. 7. 6. 6. 5. 6. 5. 6. 6.
+    #  6. 5. 5. 7. 5. 6. 7. 6. 5. 5. 6. 7. 5. 6. 8. 6. 5. 6. 7. 7. 6. 5. 5. 6.
+    #  6. 7. 5. 6. 6. 7. 6. 5. 5. 5. 7. 5. 5. 6. 6. 6. 5. 6. 5. 7. 6. 6. 5. 4.
+    #  5. 5. 5. 6. 5. 5. 5. 7. 6. 5. 6. 6. 6. 5. 6. 5. 5. 5. 5. 5. 6. 5. 7. 5.
+    #  7. 6. 5. 6. 7. 7. 6. 7. 6. 5. 6. 5. 6. 5. 6. 5. 7. 5. 6. 6. 6. 7. 6. 6.
+    #  5. 6. 4. 5. 7. 7. 5. 5. 7. 7. 5. 5. 6. 6. 7. 5. 7. 5. 7. 5. 6. 5. 5. 5.
+    #  5. 6. 7. 7. 6. 6. 6. 7. 5. 5. 6. 5. 6. 5. 6. 6. 6. 6. 7. 5. 6. 5. 6. 8.
+    #  5. 6. 7. 6. 5. 7. 6. 7. 6. 8. 6. 5. 5. 8. 5. 7. 8. 5. 5. 6. 5. 6. 6. 6.
+    #  5. 5. 5. 5. 5. 5. 5. 5. 5. 6. 5. 5. 5. 5. 5. 7. 7. 5. 6. 7. 4. 7. 5. 5.
+    #  6. 7. 6. 5. 5. 6. 8. 6. 5. 7. 7. 6. 5. 5. 5. 6. 3. 6. 7. 6. 7. 7. 8. 7.
+    #  5. 4. 5. 5. 6. 5. 6. 5. 4. 7. 5. 5. 5. 5. 6. 6. 5. 5. 5. 6. 5. 8. 5. 6.
+    #  5. 5. 5. 5. 5. 7. 6. 6. 6. 6. 7. 6. 7. 5. 7. 7. 5. 7. 6. 7. 6. 5. 6. 5.
+    #  7. 6. 6. 4. 6. 5. 5. 6. 5. 6. 5. 5. 6. 3. 6. 6. 7. 6. 3. 5. 5. 6. 5. 6.
+    #  6. 6. 5. 7. 6. 7. 5. 7. 6. 6. 7. 6. 5. 4. 7. 6. 5. 5. 7. 5. 6. 6. 5. 7.
+    #  6. 5. 5. 5. 5. 5. 5. 6. 6. 6. 6. 4. 5. 7. 6. 7. 5. 6. 7. 3. 6. 6. 6. 7.
+    #  5. 7. 6. 6. 6. 5. 6. 7. 5. 5. 6. 6. 6. 6. 5. 5. 7. 7. 6. 6. 6. 6. 5. 5.
+    #  6. 6. 7. 6. 6. 6. 7. 5. 5. 7. 4. 6. 6. 5. 7. 5. 5. 5. 5. 3. 5. 5. 6. 6.
+    #  5. 6. 5. 5. 5. 6. 3. 5. 6. 5. 5. 6. 7. 6. 7. 7. 5. 6. 6. 7. 5. 5. 5. 6.
+    #  5. 6. 6. 7. 6. 7. 6. 5. 5. 5. 7. 5. 6. 6. 5. 8. 5. 6. 6. 5. 6. 7. 6. 5.
+    #  6. 5. 6. 5. 5. 7. 5. 5. 5. 5. 7. 5. 5. 5. 6. 5. 5. 5. 6. 5. 5. 5. 6. 5.]
+    # Score zbioru testowego:
+    # 0.5479166666666667
 
-
+def split_data (data):
     y = data[:, -1]  # oryginalne przyporzadkowanie
     X = data[:, :-1]  # argumenty
-
-    # print("x: ", X)
-    # print("y", y)
-
     # podzial zbioru na dane treningowe i testowe
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+    # return X_train, X_test, y_train, y_test
+    return train_test_split(X, y, test_size=0.3, random_state=0)
 
-    print("X_test: ", X_test)
-    print("X_train: ", X_train)
-    print("y_test: ", y_test)
-    print("y_train: ", y_train)
 
-    # nie działa nie wiem czemu (liczy i nie przestaje ,nic sie nie dzieje po godzinie czekania)
+if __name__ == '__main__':
+    # pobranie danych z pliku z pominieciem pierwszego wiersza
+    data_red = np.genfromtxt('winequality-red.csv', delimiter=';', skip_header=1)
+    data_white = np.genfromtxt('winequality-white.csv', delimiter=';', skip_header=1)
+
+    # działa, wynik w komentarzu pod metodą
+    # print("METODA GAUSSA")
+    # gaussian_method(data_white)
+
+    # nie działa nie wiem czemu (liczy i nie przestaje ,nic sie nie dzieje po godzinie czekania) (dodałem że pokazuje progres, zmiejszyłem range parametrów, można włączyć by się liczyło)
     # print("METODA SVM")
-    # svm_method(X_train, X_test, y_train, y_test)
+    # svm_method(data_red)
 
     # działa (ale bez wykresów ROC i wyliczonego AUC), wyniki w komentarzu  pod metodą
     # print("METODA PJK")
-    # pjk_method(X_train, X_test, y_train, y_test)
+    # pjk_method(data_red)
 
     # działa, wyniki w komentarzu  pod metodą
     # print("METODA DT")
-    # dt_method(X_train, X_test, y_train, y_test)
+    # dt_method(data_red)
 
-    # svc = svm.SVC()
-    # svc.fit(X_train, y_train)
-    # print(svc.score(X_train, y_train))
-
-    # naive_model = GaussianNB()
-    # model_prediction = naive_model.fit(X_train, y_train.ravel())
-    # x = model_prediction.score(X_train, y_train)
-    # print(x)
+    ########################################################################################
 
     # Wymagania:
     # Projekt powinien zawierać porównanie działania co najmniej dwóch metod uczenia maszynowego. Kryteriami oceny będą między innymi:
@@ -438,4 +478,19 @@ if __name__ == '__main__':
     # b) przedstawienie zbioru danych poddawanego analizie (co znaczą poszczególne argumenty, z jakim typem zmiennych mamy do czynienia: w skali nominalnej czy porządkowej; zakres poszczególnych argumentów np. [0, 100];
     #
     # c) analiza i interpretacja wyników opatrzona wykresami i komentarzami; wykresy powinny być czytelne, osie oznaczone, wstawiona legenda.
+
+
+
+    #### Co nowego? ###
+    #
+    # 1) Dodanie metody gaussa
+    # 2) Ujednolicenie parametrów wszystkich metod
+    # 3) Dodanie parametrów powodujących wyświetlanie progressu metody svc
+    # 4) Oczyszczenie outputów metod by ułatwić analize danych oraz podsumowanie
+
+
+    ### TO DO ###
+    # 
+    # - można puścić na jakąś godzinkę svc do liczenia by potem zebrać logi progressu i umieścić w sprawku ( ty zrób puść na red ja na white)
+    # - porównanie metod względem red white i względem innych metod
 
