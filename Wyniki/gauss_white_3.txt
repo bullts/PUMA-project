@@ -1,0 +1,5 @@
+METODA GAUSSA
+Score zbioru treningowego: 
+0.999708284714119
+Score zbioru testowego: 
+0.9993197278911564

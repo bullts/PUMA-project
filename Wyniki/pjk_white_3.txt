@@ -1,0 +1,22 @@
+METODA PJK
+Dokladnosc klasyfikacji lasu losowego na zbiorze treningowym wynosi 0.989790,     zas na zbiorze testowym 0.987075
+Dokladnosc klasyfikacji regresji logistycznej na zbiorze treningowym wynosi 1.000000,     zas na zbiorze testowym 1.000000
+
+cf_matrix dla lasu:
+[[1424    0]
+ [  19   27]]
+cf_matrix_all dla lasu:
+[[4718    0]
+ [  54  126]]
+cf_matrix dla logistycznej:
+[[1424    0]
+ [   0   46]]
+cf_matrix_all dla logistycznej:
+[[4718    0]
+ [   0  180]]
+
+Precyzja wynosi 0.987075, zas pelnosc 0.987075
+DLA CALEGO ZB: Precyzja wynosi 0.988975, zas pelnosc 0.988975
+DLA KL REGRESJI LOGISTYCZNEJ: 
+Precyzja wynosi 1.000000, zas pelnosc 1.000000
+DLA CALEGO ZB: Precyzja wynosi 1.000000, zas pelnosc 1.000000

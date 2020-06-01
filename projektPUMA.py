@@ -185,7 +185,7 @@ def dt_method (data):
 
     # Drukowanie drzewa do png
     tree.plot_tree(tree_classifier.fit(X_test, y_test))
-    plt.savefig("tree_white.svg")
+    plt.savefig("tree.svg")
 
 def gaussian_method (data):
     X_train, X_test, y_train, y_test = split_data(data)
@@ -204,13 +204,47 @@ def gaussian_method (data):
     print("Score zbioru testowego: ")
     print(test_score)
 
-def split_data (data):
+def split_data_complex (data):
     y = data[:, -1]  # oryginalne przyporzadkowanie
     X = data[:, :-1]  # argumenty
     # podzial zbioru na dane treningowe i testowe
     # return X_train, X_test, y_train, y_test
     return train_test_split(X, y, test_size=0.3, random_state=0)
 
+
+def split_data(data):
+    # zamiana ostatniej kolumny na one-hot vectory
+    # i podział na 3 klasy
+    note = data[:, -1].astype(int)
+
+    for i in range(len(note)):
+        note[i] = qualityclass(note[i])
+    one_hot_note = np.eye(3)[note]
+
+    data = np.delete(data, 11, axis=1)
+    data = np.concatenate((data, one_hot_note), axis=1)
+
+    y = data[:, -1]  # oryginalne przyporzadkowanie
+    X = data[:, :-1]  # argumenty
+
+    # podzial zbioru na dane treningowe i testowe
+    return train_test_split(X, y, test_size=0.3, random_state=0)
+
+def qualityclass(x):
+    if x == 3:
+        return 0
+    if x == 4:
+        return 0
+    if x == 5:
+        return 0
+    if x == 6:
+        return 1
+    if x == 7:
+        return 1
+    if x == 8:
+        return 2
+    if x == 9:
+        return 2
 
 if __name__ == '__main__':
     # pobranie danych z pliku z pominieciem pierwszego wiersza
@@ -220,14 +254,14 @@ if __name__ == '__main__':
     # print("METODA GAUSSA")
     # gaussian_method(data_red)
 
-    # print("METODA SVM")
-    # svm_method(data_red)
+    print("METODA SVM")
+    svm_method(data_red)
 
     # print("METODA PJK")
-    # pjk_method(data_white)
+    # pjk_method(data_red)
 
-    print("METODA DT")
-    dt_method(data_white)
+    # print("METODA DT")
+    # dt_method(data_red)
 
     ########################################################################################
 

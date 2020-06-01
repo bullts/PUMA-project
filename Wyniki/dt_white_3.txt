@@ -1,0 +1,13 @@
+METODA DT
+zb treningowy ------------------------------
+score:
+1.0
+conf matrix:
+[[3294    0]
+ [   0  134]]
+zb testowy ------------------------------
+score:
+1.0
+conf matrix:
+[[1424    0]
+ [   0   46]]

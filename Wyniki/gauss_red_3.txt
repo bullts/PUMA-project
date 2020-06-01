@@ -1,0 +1,5 @@
+METODA GAUSSA
+Score zbioru treningowego: 
+1.0
+Score zbioru testowego: 
+1.0
