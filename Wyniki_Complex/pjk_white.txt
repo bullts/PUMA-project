@@ -1,0 +1,39 @@
+Dokladnosc klasyfikacji lasu losowego na zbiorze treningowym wynosi 0.580222,     zas na zbiorze testowym 0.527211
+Dokladnosc klasyfikacji regresji logistycznej na zbiorze treningowym wynosi 0.542299,     zas na zbiorze testowym 0.521769
+
+cf_matrix dla lasu:
+[[  0   0   4   5   0   0]
+ [  0   0  29  29   2   0]
+ [  0   0 235 223   0   0]
+ [  0   0 101 507  22   0]
+ [  0   0  14 220  33   0]
+ [  0   0   0  38   8   0]]
+cf_matrix_all dla lasu:
+[[   0    0    7   13    0    0    0]
+ [   0    0   88   73    2    0    0]
+ [   0    0  833  621    3    0    0]
+ [   0    0  358 1777   63    0    0]
+ [   0    0   30  696  154    0    0]
+ [   0    0    0  140   35    0    0]
+ [   0    0    0    2    3    0    0]]
+cf_matrix dla logistycznej:
+[[  0   0   4   5   0   0]
+ [  0   0  32  26   2   0]
+ [  0   0 226 230   2   0]
+ [  0   0 102 494  33   1]
+ [  0   0  15 205  47   0]
+ [  0   0   0  35  11   0]]
+cf_matrix_all dla logistycznej:
+[[   0    0    8   11    0    1    0]
+ [   0    0   99   62    2    0    0]
+ [   0    0  732  717    8    0    0]
+ [   0    0  372 1716  109    1    0]
+ [   0    0   37  665  178    0    0]
+ [   0    0    1  120   54    0    0]
+ [   0    0    0    2    3    0    0]]
+
+Precyzja wynosi 0.527211, zas pelnosc 0.527211
+DLA CALEGO ZB: Precyzja wynosi 0.564312, zas pelnosc 0.564312
+DLA KL REGRESJI LOGISTYCZNEJ: 
+Precyzja wynosi 0.521769, zas pelnosc 0.521769
+DLA CALEGO ZB: Precyzja wynosi 0.536137, zas pelnosc 0.536137
