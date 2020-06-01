@@ -255,7 +255,7 @@ if __name__ == '__main__':
     # gaussian_method(data_red)
 
     print("METODA SVM")
-    svm_method(data_red)
+    svm_method(data_white)
 
     # print("METODA PJK")
     # pjk_method(data_red)
@@ -280,7 +280,7 @@ if __name__ == '__main__':
     #
     # 1) Dodanie metody gaussa
     # 2) Ujednolicenie parametrów wszystkich metod
-    # 3) Dodanie parametrów powodujących wyświetlanie progressu metody svc
+    # 3) Dodanie parametrów powodujących wyświetlanie progressu metody svc  
     # 4) Oczyszczenie outputów metod by ułatwić analize danych oraz podsumowanie
 
 
