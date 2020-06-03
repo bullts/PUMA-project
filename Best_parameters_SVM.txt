@@ -1,0 +1,11 @@
+Najlepsze parametry: {'C': 64, 'degree': 1, 'gamma': 0.015625, 'kernel': 'linear'} - svm_red_3
+Najlepsze parametry: {'kernel': 'linear', 'gamma': 64, 'degree': 1, 'C': 64}
+Najlepsze parametry: {'C': 64, 'degree': 1, 'gamma': 0.015625, 'kernel': 'linear'} - svm_white_3
+Najlepsze parametry: {'kernel': 'linear', 'gamma': 64, 'degree': 1, 'C': 64}
+Najlepsze parametry: {'C': 4, 'degree': 1, 'gamma': 0.25, 'kernel': 'linear'} - svm_red
+Najlepsze parametry: {'kernel': 'linear', 'gamma': 4, 'degree': 2, 'C': 4}
+Najlepsze parametry: {'C': 4, 'degree': 1, 'gamma': 0.25, 'kernel': 'rbf'} - svm_white
+Najlepsze parametry: {'kernel': 'linear', 'gamma': 4, 'degree': 2, 'C': 4}
+
+
+

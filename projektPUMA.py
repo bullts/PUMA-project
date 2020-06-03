@@ -50,7 +50,7 @@ def svm_method (data):
     print('Dokladnosc zb treningowego: ' + str(bestRSt))
 
 def pjk_method (data):
-    X_train, X_test, y_train, y_test = split_data(data)
+    X_train, X_test, y_train, y_test = split_data_complex(data)
     classifier = tree.DecisionTreeClassifier(random_state=0)
     path = classifier.cost_complexity_pruning_path(X_train, y_train)
     alphas = path.ccp_alphas
@@ -148,7 +148,7 @@ def pjk_method (data):
     print("DLA CALEGO ZB: Precyzja wynosi {0:3f}, zas pelnosc {1:3f}".format(precision_all_l, recall_all_l))
 
 def dt_method (data):
-    X_train, X_test, y_train, y_test = split_data(data)
+    X_train, X_test, y_train, y_test = split_data_complex(data)
     # Trenowanie klasyfikatora
     tree_classifier = tree.DecisionTreeClassifier(random_state=0)
     tree_classifier.fit(X_train, y_train)
@@ -251,8 +251,8 @@ if __name__ == '__main__':
     data_red = np.genfromtxt('winequality-red.csv', delimiter=';', skip_header=1)
     data_white = np.genfromtxt('winequality-white.csv', delimiter=';', skip_header=1)
 
-    # print("METODA GAUSSA")
-    # gaussian_method(data_red)
+    print("METODA GAUSSA")
+    gaussian_method(data_red)
 
     # print("METODA SVM")
     # svm_method(data_white)
