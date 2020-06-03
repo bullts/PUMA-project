@@ -228,7 +228,7 @@ def split_data(data):
     X = data[:, :-1]  # argumenty
 
     # podzial zbioru na dane treningowe i testowe
-    return train_test_split(X, y, test_size=0.3, random_state=0)
+    return train_test_split(X, y, test_size=0.3, random_state=2)
 
 def qualityclass(x):
     if x == 3:
@@ -254,38 +254,17 @@ if __name__ == '__main__':
     # print("METODA GAUSSA")
     # gaussian_method(data_red)
 
-    print("METODA SVM")
-    svm_method(data_white)
+    # print("METODA SVM")
+    # svm_method(data_white)
 
     # print("METODA PJK")
-    # pjk_method(data_red)
+    # pjk_method(data_white)
 
     # print("METODA DT")
     # dt_method(data_red)
 
     ########################################################################################
 
-    # Wymagania:
-    # Projekt powinien zawierać porównanie działania co najmniej dwóch metod uczenia maszynowego. Kryteriami oceny będą między innymi:
-    #
-    # a) dobranie odpowiednich parametrów pracy algorytmów;
-    #
-    # b) przedstawienie zbioru danych poddawanego analizie (co znaczą poszczególne argumenty, z jakim typem zmiennych mamy do czynienia: w skali nominalnej czy porządkowej; zakres poszczególnych argumentów np. [0, 100];
-    #
-    # c) analiza i interpretacja wyników opatrzona wykresami i komentarzami; wykresy powinny być czytelne, osie oznaczone, wstawiona legenda.
-
-
-
-    #### Co nowego? ###
-    #
-    # 1) Dodanie metody gaussa
-    # 2) Ujednolicenie parametrów wszystkich metod
-    # 3) Dodanie parametrów powodujących wyświetlanie progressu metody svc  
-    # 4) Oczyszczenie outputów metod by ułatwić analize danych oraz podsumowanie
-
-
-    ### TO DO ###
-    #
-    # - można puścić na jakąś godzinkę svc do liczenia by potem zebrać logi progressu i umieścić w sprawku ( ty zrób puść na red ja na white)
-    # - porównanie metod względem red white i względem innych metod
-
+    # Metody są zakomentowane w celu dokładniejszej analizy i testów każdej z nich podczas
+    # tworzenia programu oraz dokumentacji.
+    # Wszystkie dane wyjściowe z metod znajdują się w folderach Wyniki oraz Wyniki_Complex
